@@ -9,6 +9,6 @@ module.exports = merge(common, {
     port: 3000,
     contentBase: path.join(__dirname, "app"),
     hot: true,
-    historyApiFallback: { index: "index.html" }
+    historyApiFallback: true
   }
 })
