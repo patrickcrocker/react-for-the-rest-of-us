@@ -7,13 +7,13 @@ function HomeGuest() {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 
-  async function handleSubmit(e) {
-    e.preventDefault()
+  async function handleSubmit(event) {
+    event.preventDefault()
     try {
       Axios.post("http://localhost:8080/register", { username, email, password })
       console.log("User was successfully created.")
-    } catch (e) {
-      console.log(e.response.data)
+    } catch (error) {
+      console.log(error.response.data)
     }
   }
 
