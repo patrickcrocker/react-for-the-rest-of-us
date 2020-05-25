@@ -1,0 +1,59 @@
+---
+jobs:
+  - name: deploy
+    public: true
+    plan:
+      - get: source-code
+        trigger: true
+      - task: build
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: node
+              tag: "lts"
+          inputs:
+            - name: source-code
+          outputs:
+            - name: source-code
+          caches:
+            - path: source-code/node_modules
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                cd source-code
+                npm install
+                npm run build
+      - put: cloud-foundry
+        params:
+          commands:
+            - command: create-org
+            - command: create-space
+            - command: push
+              manifest: source-code/manifest.yml
+
+resources:
+  - name: source-code
+    type: git
+    source:
+      uri: ((git_uri))
+      private_key: ((git_key.private_key))
+
+  - name: cloud-foundry
+    type: cf-cli-resource
+    source:
+      api: ((cf_api))
+      username: ((cf.username))
+      password: ((cf.password))
+      org: ((cf_org))
+      space: ((cf_space))
+
+resource_types:
+  - name: cf-cli-resource
+    type: docker-image
+    source:
+      repository: nulldriver/cf-cli-resource
+      tag: latest
