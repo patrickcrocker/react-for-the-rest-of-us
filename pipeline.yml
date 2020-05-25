@@ -41,6 +41,8 @@ resources:
     source:
       uri: ((git_uri))
       private_key: ((git_key.private_key))
+      ignore_paths:
+        - pipeline.yml
 
   - name: cloud-foundry
     type: cf-cli-resource
