@@ -26,7 +26,7 @@ jobs:
               - |
                 cd source-code
                 npm install
-                npm run webpackBuild
+                npm run build
       - put: cloud-foundry
         params:
           commands:
